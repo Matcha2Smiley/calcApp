@@ -46,8 +46,8 @@ function createDefaultForm(){
     hidden.value = '';
     msg.textContent = '新しい計算式の入力';
     //onclickイベントの関数を削除
-    button.removeEventListner('click', doCalcAction);
-    button.removeEventListner('click', doDefaultAction);
+    button.removeEventListener('click', doCalcAction);
+    button.removeEventListener('click', doDefaultAction);
     //buttonのonclickイベントにdoDefaultActionを設定button.
     button.addEventListener('click', doDefaultAction, false);
 }
@@ -59,6 +59,7 @@ function createMenu(){
     //新しい式を作成メニューを用意
     var opt = document.createElement("option");
     opt.id = '0';
+    opt.textContent='新しい式を作成';
     opt.value = 'default';
     menu.appendChild(opt);
     //登録済みの関数の個数を取り出す
@@ -102,7 +103,7 @@ function doChangeForm(event){
     //選んだメニュー項目のvalueを取得
     var value = event.target.value;
     //valueがdefaultだったらcreateDefaultForm実行
-    if(value=='defalut'){
+    if(value=='default'){
         createDefaultForm();
         return;
     }
@@ -122,7 +123,7 @@ function doChangeForm(event){
         tr = document.createElement("tr");
         th = document.createElement("th");
         th.textContent = fields[i];
-        td = document.createElement("input");
+        td = document.createElement("td");
         //<input>タグを生成
         input = document.createElement("input");
         input.type = 'text';
@@ -131,17 +132,17 @@ function doChangeForm(event){
         td.appendChild(input);
         tr.appendChild(th);
         tr.appendChild(td);
-        forom.appendChild(tr);
+        form.appendChild(tr);
     } 
 
     //hidden, msgの値設定
     hidden.value = value;
     msg.textContent = obj.name;
     //onclickイベントの関数を削除
-    button.removeEventListner('click', doCalcAction);
-    button.removeEventListner('click', doDefaultAction);
+    button.removeEventListener('click', doCalcAction);
+    button.removeEventListener('click', doDefaultAction);
     //buttonのonclickイベントにdoCalcActionを設定
-    button.add.addEventListener('click', doCalcAction, false);
+    button.addEventListener('click', doCalcAction, false);
 }
 
 //計算式選択時のプッシュボタン用関数
@@ -149,6 +150,7 @@ function doCalcAction(){
     //hiddenの値を元にオブジェクトを用意
     var obj_str = localStorage.getItem(hidden.value);
     var obj = JSON.parse(obj_str);
+    console.log(obj);
     //names, count, formulaを用意
     var names = obj.fields.split(',');
     var count = names.length;
@@ -158,9 +160,13 @@ function doCalcAction(){
         var name = names[i];
         var value = document.getElementById(name).value;
         formula = formula.split(name).join(value);
+        console.log(name);
+        console.log(value);
     }
+    
 
     //formulaの式を実行し結果を表示
+    
     var result = eval(formula);
-    msg.textContent = 'result:' + result;
+    msg.textContent = 'result:'+result;
 }
